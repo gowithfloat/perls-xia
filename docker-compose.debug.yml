@@ -1,0 +1,17 @@
+version: '3.4'
+
+services:
+  xiaperls:
+    image: xiaperls
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: base
+    env_file:
+      - ./.env
+    volumes:
+      - ./build:/usr/src/app/build
+      - ./node_modules:/usr/src/app/node_modules
+    ports:
+      - 9229:9229
+    command: ["npm", "run", "debug"]

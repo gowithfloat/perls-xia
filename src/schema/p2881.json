@@ -1,0 +1,1077 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "required": [
+    "learning_experience_sets"
+  ],
+  "properties": {
+    "learning_experience_sets": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "required": [
+            "learning_experience"
+          ],
+          "properties": {
+            "learning_experience": {
+              "type": "object",
+              "properties": {
+                "learning_experience_identifier": {
+                  "type": "string"
+                },
+                "learning_experience_catalog_references": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "learning_experience_CatalogReference": {
+                          "type": "string"
+                        },
+                        "learning_experience_CatalogEntry": {
+                          "type": "string"
+                        },
+                        "learning_experience_CatalogURL": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  ]
+                },
+                "learning_experience_version": {
+                  "type": "object",
+                  "properties": {
+                    "learning_experience_version_number": {
+                      "type": "string"
+                    },
+                    "learning_experience_version_is_current": {
+                      "type": "string"
+                    },
+                    "learning_experience_version_is_previous": {
+                      "type": "string"
+                    },
+                    "learning_experience_version_parent": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "learning_experience_name": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "language_code": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "learning_experience_descriptions": {
+                  "type": "object",
+                  "properties": {
+                    "description": {
+                      "type": "string"
+                    },
+                    "language_code": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "learning_experience_languages": {
+                  "type": "object",
+                  "properties": {
+                    "language_code": {
+                      "type": "string"
+                    },
+                    "language_name": {
+                      "type": "string"
+                    },
+                    "is_primary_language": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "learning_experience_thumbnail_url": {
+                  "type": "string"
+                },
+                "learning_experience_keywords": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "learning_experience_keyword_taxonomy": {
+                          "type": "string"
+                        },
+                        "learning_experience_keyword_term": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  ]
+                },
+                "learning_experience_lifecycle": {
+                  "type": "object",
+                  "properties": {
+                    "Publisher": {
+                      "type": "string"
+                    },
+                    "Provider": {
+                      "type": "string"
+                    },
+                    "Maintainer": {
+                      "type": "string"
+                    },
+                    "Producer": {
+                      "type": "string"
+                    },
+                    "Sponsor": {
+                      "type": "string"
+                    },
+                    "Author": {
+                      "type": "string"
+                    },
+                    "Developer": {
+                      "type": "string"
+                    },
+                    "Editor": {
+                      "type": "string"
+                    },
+                    "Other": {
+                      "type": "string"
+                    },
+                    "Accreditor": {
+                      "type": "string"
+                    },
+                    "Translator": {
+                      "type": "string"
+                    },
+                    "learning_experience_lifecycle_stage": {
+                      "type": "string"
+                    },
+                    "learning_experience_lifecycle_date_updated": {
+                      "type": "string"
+                    },
+                    "learning_experience_lifecycle_updated_by": {
+                      "type": "string"
+                    },
+                    "learning_experience_lifecycle_date_verified": {
+                      "type": "string"
+                    },
+                    "learning_experience_lifecycle_verified_by": {
+                      "type": "string"
+                    },
+                    "learning_experience_lifecycle_date_published": {
+                      "type": "string"
+                    },
+                    "learning_experience_lifecycle_published_by": {
+                      "type": "string"
+                    },
+                    "learning_experience_lifecycle_date_modified": {
+                      "type": "string"
+                    },
+                    "learning_experience_lifecycle_modified_by": {
+                      "type": "string"
+                    },
+                    "learning_expereince_lifecycle_date_expired": {
+                      "type": "string"
+                    },
+                    "learning_expereince_lifecycle_expired_by": {
+                      "type": "string"
+                    },
+                    "learning_experience_lifecycle_date_translated": {
+                      "type": "string"
+                    },
+                    "learning_experience_lifecycle_translated_by": {
+                      "type": "object",
+                      "properties": {
+                        "learning_experience_TranslationOfWork": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "learning_experience_accreditation": {
+                      "type": "object",
+                      "properties": {
+                        "learning_experience_accreditation_type": {
+                          "type": "string"
+                        },
+                        "learning_experience_accreditation_process": {
+                          "type": "string"
+                        },
+                        "learning_experience_accreditation_date_awarded": {
+                          "type": "string"
+                        },
+                        "learning_experience_accreditation_date_expired": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "learning_experience_compliance": {
+                      "type": "object",
+                      "properties": {
+                        "learning_experience_RegulatoryFactors": {
+                          "type": "string"
+                        },
+                        "learning_experience_AccessibilityAPI": {
+                          "type": "string"
+                        },
+                        "learning_experience_AccessibilityControl": {
+                          "type": "string"
+                        },
+                        "learning_experience_AccessibilityFeature": {
+                          "type": "string"
+                        },
+                        "learning_experience_AccessibilityHazard": {
+                          "type": "string"
+                        },
+                        "learning_experience_AccessibilitySummary": {
+                          "type": "string"
+                        },
+                        "learning_experience_AccessConditions": {
+                          "type": "string"
+                        },
+                        "learning_experience_AccessModeSufficient": {
+                          "type": "string"
+                        },
+                        "learning_experience_PublishingPrinciples": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "learning_experience_metadata": {
+                      "type": "object",
+                      "properties": {
+                        "learning_experience_MetadataIdentifier": {
+                          "type": "string"
+                        },
+                        "learning_experience_MetadataSource": {
+                          "type": "string"
+                        },
+                        "learning_experience_MetadataSchema": {
+                          "type": "string"
+                        },
+                        "learning_experience_LearningResourceMetadataRepositoryURL": {
+                          "type": "string"
+                        },
+                        "learning_experience_RepositoryID": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "learning_experience_authorization": {
+                      "type": "object",
+                      "properties": {
+                        "learning_experience_DistributionText": {
+                          "type": "string"
+                        },
+                        "learning_experience_DistributionGroups": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "learning_experience_Requirements": {
+                      "type": "array",
+                      "items": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "learning_experience_EnvironmentalRequirements": {
+                              "type": "string"
+                            },
+                            "learning_experience_OrCompositeRequirement": {
+                              "type": "string"
+                            },
+                            "learning_experience_TechnicalRequirement": {
+                              "type": "string"
+                            },
+                            "learning_experience_TechnicalRequirementName": {
+                              "type": "string"
+                            },
+                            "learning_experience_MinimumVersion": {
+                              "type": "string"
+                            },
+                            "learning_experience_MaximumVersion": {
+                              "type": "string"
+                            },
+                            "learning_experience_RequiredSupplies": {
+                              "type": "string"
+                            },
+                            "learning_experience_OtherLearningResourceRequirements": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "learning_experience_alignments": {
+                      "type": "array",
+                      "items": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "learning_experience_alignment_EducationalAlignment": {
+                              "type": "string"
+                            },
+                            "learning_experience_alignment_AlignmentType": {
+                              "type": "string"
+                            },
+                            "learning_experience_alignment_IsCourseAlignedToStandardsIndicator": {
+                              "type": "string"
+                            },
+                            "learning_experience_alignment_EducationalFramework": {
+                              "type": "string"
+                            },
+                            "learning_experience_alignment_FrameworkDescription": {
+                              "type": "string"
+                            },
+                            "learning_experience_alignment_FrameworkID": {
+                              "type": "string"
+                            },
+                            "learning_experience_alignment_TargetDescription": {
+                              "type": "string"
+                            },
+                            "learning_experience_alignment_TargetName": {
+                              "type": "string"
+                            },
+                            "learning_experience_alignment_TargetNodeURL": {
+                              "type": "string"
+                            },
+                            "learning_experience_alignment_Relevance": {
+                              "type": "string"
+                            },
+                            "learning_experience_alignment_EducationalUse": {
+                              "type": "string"
+                            },
+                            "learning_experience_alignment_TargetInstructionalEnvironment": {
+                              "type": "string"
+                            },
+                            "learning_experience_alignment_Citation": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "learning_experience_relationships": {
+                      "type": "array",
+                      "items": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "learning_experience_relationship_RelationshipType": {
+                              "type": "string"
+                            },
+                            "learning_experience_relationship_IsPreparationFor": {
+                              "type": "string"
+                            },
+                            "learning_experience_relationship_IsRecommendedFor": {
+                              "type": "string"
+                            },
+                            "learning_experience_relationship_IsRequiredFor": {
+                              "type": "string"
+                            },
+                            "learning_experience_relationship_IsPartOf": {
+                              "type": "string"
+                            },
+                            "learning_experience_relationship_Supercedes": {
+                              "type": "string"
+                            },
+                            "learning_experience_relationship_IsSupercededBy": {
+                              "type": "string"
+                            },
+                            "learning_experience_relationship_SameAs": {
+                              "type": "string"
+                            },
+                            "learning_experience_relationship_Mentions": {
+                              "type": "string"
+                            },
+                            "learning_experience_relationship_OrganizationalAlignment (Squadron)": {
+                              "type": "string"
+                            },
+                            "learning_experience_relationship_Occupational Alignment": {
+                              "type": "string"
+                            },
+                            "learning_experience_relationship_OccupationalServiceCode": {
+                              "type": "string"
+                            },
+                            "learning_experience_relationship_OccupationalServiceCodeSeries": {
+                              "type": "string"
+                            },
+                            "learning_experience_relationship_SecondCareerCategory": {
+                              "type": "string"
+                            },
+                            "learning_experience_relationship_Security": {
+                              "type": "string"
+                            },
+                            "learning_experience_relationship_PrimaryCareerCategory": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "learning_experience_rights": {
+                      "type": "array",
+                      "items": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "learning_experience_right_License": {
+                              "type": "string"
+                            },
+                            "learning_experience_right_UseRightsUrl": {
+                              "type": "string"
+                            },
+                            "learning_experience_right_AccountablePerson": {
+                              "type": "string"
+                            },
+                            "learning_experience_right_AcquireLicense": {
+                              "type": "string"
+                            },
+                            "learning_experience_right_copyrightHolder": {
+                              "type": "string"
+                            },
+                            "learning_experience_right_CopyrightYear": {
+                              "type": "string"
+                            },
+                            "learning_experience_right_IsAccessibleForFree": {
+                              "type": "string"
+                            },
+                            "learning_experience_right_Offers": {
+                              "type": "string"
+                            },
+                            "learning_experience_right_Restrictions": {
+                              "type": "string"
+                            },
+                            "learning_experience_right_DistributionStatement": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "learning_experience_audit": {
+                      "type": "object",
+                      "properties": {
+                        "learning_experience_InteractionStatistic": {
+                          "type": "string"
+                        },
+                        "learning_experience_LearningResourceLRSEndpoint": {
+                          "type": "string"
+                        },
+                        "learning_experience_LearningResourcePerformanceFormat": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "learning_experience_type": {
+                      "type": "object",
+                      "properties": {
+                        "learning_experience_type_course_CourseTitle": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseSubjectMatter": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseSubjectAbbreviation": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseID": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseNumber": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseCode": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseCodeSystem": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseLevel": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseLevelCharacteristics": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseLevelType": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseDescription": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_EducationalContext": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseWorkload": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_Learning Transfer": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_DifficultyLevel": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseAudience": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_InstructionalProgramType": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_DistanceEducationProgramEnrollmentIndicator": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CoursePrerequisites": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseCredits": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseCertificateDescription": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseCreditType": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CreditBasisType": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CreditLevelType": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_HonorsType": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CreditAssessmentType": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseAcademicGrade": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseNarrativeExplanationGrade": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseGradeScalecode": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseQualityPoints": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseAcademicGradeStatusCode": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_AssessmentReportingMethod": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseGPAApplicability": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseSectionIdentifier": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseSectionAlignment": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseSectionStartDate": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseSectionEndDate": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseSectionLastUpdateDate": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_EstimatedCompletionTime": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseProviderName": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_DepartmentName": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_DepartmentID": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_AccreditedBy": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_AccreditationType": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_AccreditationAdminProcess": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_AccreditationAwardDate": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_AccreditationExpirationDate": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseFundingProgram": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseOverrideSchool": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseTerminatedDate": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseTerminatedReason": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseRepeatability": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseRepeatCode": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseAdditionalInformation": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseAdministratorInstruction": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseApplicationProcess": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseEligibility": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseRegistrationInstructions": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseEquipmentRequired": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseFunding": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseLearningOutcome": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseObjective": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseOfficeOfCoordinationResponsibility": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseReportingInstructions": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseSecurityRequirements": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseSelectionProcess": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseSpecialNotes": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseSpecialRequirements": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseTeachingFTD": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseUniformRequirements": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseWaiverAuthority": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseCareerCategory": {
+                          "type": "string"
+                        },
+                        "learning_experience_type_course_CourseTrainingGroup": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "learning_experience_activity_sets": {
+                      "type": "array",
+                      "items": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "learning_activity": {
+                              "type": "object",
+                              "properties": {
+                                "learning_activity_identifier": {
+                                  "type": "string"
+                                },
+                                "learning_activity_version": {
+                                  "type": "string"
+                                },
+                                "learning_activity_thumbnail_url": {
+                                  "type": "string"
+                                },
+                                "learning_activity_type": {
+                                  "type": "string"
+                                },
+                                "learning_activity_name": {
+                                  "type": "object",
+                                  "properties": {
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "language_code": {
+                                      "type": "string"
+                                    }
+                                  }
+                                },
+                                "learning_activity_descriptions": {
+                                  "type": "object",
+                                  "properties": {
+                                    "description": {
+                                      "type": "string"
+                                    },
+                                    "language_code": {
+                                      "type": "string"
+                                    }
+                                  }
+                                },
+                                "learning_activity_languages": {
+                                  "type": "object",
+                                  "properties": {
+                                    "language_code": {
+                                      "type": "string"
+                                    },
+                                    "language_name": {
+                                      "type": "string"
+                                    },
+                                    "is_primary_language": {
+                                      "type": "string"
+                                    }
+                                  }
+                                },
+                                "learning_activity_Type": {
+                                  "type": "string"
+                                },
+                                "learning_activity_InstructorResourceType": {
+                                  "type": "string"
+                                },
+                                "learning_activity_Description": {
+                                  "type": "string"
+                                },
+                                "learning_activity_URL": {
+                                  "type": "string"
+                                },
+                                "learning_activity_SupportedContentType": {
+                                  "type": "string"
+                                },
+                                "learning_activity_InteractionMode": {
+                                  "type": "string"
+                                },
+                                "learning_activity_InstructionMethod": {
+                                  "type": "string"
+                                },
+                                "learning_activity_HasRecommender": {
+                                  "type": "string"
+                                },
+                                "learning_activity_InteractivityLevel": {
+                                  "type": "string"
+                                },
+                                "learning_activity_LearnerControlLevel": {
+                                  "type": "string"
+                                },
+                                "learning_activity_LearningExperienceType": {
+                                  "type": "string"
+                                },
+                                "learning_activity_InstructorToStudentRatio": {
+                                  "type": "string"
+                                },
+                                "learning_activity_EventSchedule": {
+                                  "type": "string"
+                                },
+                                "learning_activity_Duration": {
+                                  "type": "string"
+                                },
+                                "learning_activity_Location": {
+                                  "type": "string"
+                                },
+                                "learning_activity_SequenceNumber": {
+                                  "type": "string"
+                                },
+                                "learning_activity_Status": {
+                                  "type": "string"
+                                },
+                                "learning_activity_EventStatus": {
+                                  "type": "string"
+                                },
+                                "learning_activity_SafetyFactors": {
+                                  "type": "array",
+                                  "items": {}
+                                },
+                                "learning_activity_audit": {
+                                  "type": "object",
+                                  "properties": {
+                                    "learning_activity_audit_DataType": {
+                                      "type": "string"
+                                    },
+                                    "learning_activity_audit_DataRepositoryURL": {
+                                      "type": "string"
+                                    },
+                                    "learning_activity_audit_DataFileName": {
+                                      "type": "string"
+                                    },
+                                    "learning_activity_audit_DataFileLocation": {
+                                      "type": "string"
+                                    },
+                                    "learning_activity_audit_SensorDeviceID": {
+                                      "type": "string"
+                                    },
+                                    "learning_activity_audit_SensorDeviceName": {
+                                      "type": "string"
+                                    },
+                                    "learning_activity_audit_SensorDeviceCategoryText": {
+                                      "type": "string"
+                                    },
+                                    "learning_activity_audit_SensorDeviceManufacturerText": {
+                                      "type": "string"
+                                    },
+                                    "learning_activity_audit_SensorDeviceDescriptionText": {
+                                      "type": "string"
+                                    },
+                                    "learning_activity_audit_SensorDeviceMakeText": {
+                                      "type": "string"
+                                    },
+                                    "learning_activity_audit_SensorDeviceModelText": {
+                                      "type": "string"
+                                    },
+                                    "learning_activity_audit_SensorDeviceSerialNumberText": {
+                                      "type": "string"
+                                    },
+                                    "learning_activity_audit_SensorDeviceFirmwareVersionText": {
+                                      "type": "string"
+                                    },
+                                    "learning_activity_audit_SensorDataRepository": {
+                                      "type": "string"
+                                    },
+                                    "learning_activity_audit_SensorDataType": {
+                                      "type": "string"
+                                    },
+                                    "learning_activity_audit_CaptureUTCDateTime": {
+                                      "type": "string"
+                                    },
+                                    "learning_activity_audit_CaptureDate": {
+                                      "type": "string"
+                                    },
+                                    "learning_activity_audit_CaptureDataFileName": {
+                                      "type": "string"
+                                    }
+                                  }
+                                },
+                                "learning_activity_equipment_sets": {
+                                  "type": "array",
+                                  "items": [
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "learning_activity_equipment_set_identifier": {
+                                          "type": "string"
+                                        },
+                                        "learning_activity_equipment_set_title": {
+                                          "type": "string"
+                                        },
+                                        "learning_activity_equipment_set_items": {
+                                          "type": "array",
+                                          "items": [
+                                            {
+                                              "type": "object",
+                                              "properties": {
+                                                "learning_activity_equipment_set_item": {
+                                                  "type": "string"
+                                                }
+                                              }
+                                            }
+                                          ]
+                                        }
+                                      }
+                                    }
+                                  ]
+                                },
+                                "learning_activity_ConnectedSystems": {
+                                  "type": "array",
+                                  "items": {}
+                                },
+                                "learning_activity_content_sets": {
+                                  "type": "array",
+                                  "items": [
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "learning_activity_content_set_Identifier": {
+                                          "type": "string"
+                                        },
+                                        "learning_activity_content_set_Title": {
+                                          "type": "string"
+                                        },
+                                        "learning_activity_content_set_Pacing": {
+                                          "type": "string"
+                                        },
+                                        "learning_activity_activity_content_set_sections": {
+                                          "type": "array",
+                                          "items": [
+                                            {
+                                              "type": "object",
+                                              "properties": {
+                                                "learning_activity_content_set_section_Name": {
+                                                  "type": "string"
+                                                },
+                                                "learning_activity_content_set_section_Identifier": {
+                                                  "type": "string"
+                                                },
+                                                "learning_activity_content_set_section_Alignment": {
+                                                  "type": "string"
+                                                },
+                                                "learning_activity_content_set_items": {
+                                                  "type": "array",
+                                                  "items": {}
+                                                }
+                                              }
+                                            }
+                                          ]
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "learning_experience_instances": {
+                      "type": "array",
+                      "items": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "learning_experience_instance": {
+                              "type": "object",
+                              "properties": {
+                                "learning_experience_instance_CourseURL": {
+                                  "type": "string"
+                                },
+                                "learning_experience_instance_CourseLocation": {
+                                  "type": "string"
+                                },
+                                "learning_experience_instance_CourseLocationType": {
+                                  "type": "string"
+                                },
+                                "learning_experience_instance_CourseType": {
+                                  "type": "string"
+                                },
+                                "learning_experience_instance_DeliveryMode": {
+                                  "type": "string"
+                                },
+                                "learning_experience_instance_Instructor": {
+                                  "type": "string"
+                                },
+                                "learning_experience_instance_CourseSectionActivities": {
+                                  "type": "string"
+                                },
+                                "learning_experience_instance_CourseSectionDeliveryMode": {
+                                  "type": "string"
+                                },
+                                "learning_experience_instance_Instance": {
+                                  "type": "string"
+                                },
+                                "learning_experience_instance_StartDate": {
+                                  "type": "string"
+                                },
+                                "learning_experience_instance_Duration": {
+                                  "type": "string"
+                                },
+                                "learning_experience_instance_EndDate": {
+                                  "type": "string"
+                                },
+                                "learning_experience_instance_MaximumAttendeeCapacity": {
+                                  "type": "string"
+                                },
+                                "learning_experience_instance_MaximumPhysicalAttendee": {
+                                  "type": "string"
+                                },
+                                "learning_experience_instance_maximumVirtualAttendee": {
+                                  "type": "string"
+                                },
+                                "learning_experience_instance_RemainingAttendeeCapacity": {
+                                  "type": "string"
+                                },
+                                "learning_experience_instance_AggregateRating": {
+                                  "type": "string"
+                                },
+                                "learning_experience_instance_RatingCount": {
+                                  "type": "string"
+                                },
+                                "learning_experience_instance_ReviewCount": {
+                                  "type": "string"
+                                },
+                                "learning_experience_instance_BestRating": {
+                                  "type": "string"
+                                },
+                                "learning_experience_instance_WorstRating": {
+                                  "type": "string"
+                                },
+                                "learning_experience_instance_DiscussionURL": {
+                                  "type": "string"
+                                },
+                                "learning_experience_instance_CourseSchedule": {
+                                  "type": "string"
+                                },
+                                "learning_experience_instance_Location": {
+                                  "type": "string"
+                                },
+                                "learning_experience_instance_InstallationNotes": {
+                                  "type": "string"
+                                },
+                                "learning_experience_instance_settings": {
+                                  "type": "array",
+                                  "items": [
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "learning_experience_instance_setting": {
+                                          "type": "object",
+                                          "properties": {
+                                            "learning_experience_instance_Setting_ID": {
+                                              "type": "string"
+                                            },
+                                            "learning_experience_instance_Setting_Name": {
+                                              "type": "string"
+                                            },
+                                            "learning_experience_instance_Setting_DescriptionText": {
+                                              "type": "string"
+                                            },
+                                            "learning_experience_instance_Setting_Data": {
+                                              "type": "string"
+                                            },
+                                            "learning_experience_instance_Setting_PresetData": {
+                                              "type": "string"
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

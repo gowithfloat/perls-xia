@@ -1,0 +1,31 @@
+{
+  "configurations": [
+    {
+      "name": "Launch Node Debugger",
+      "preLaunchTask": "tsc-watch",
+      "port": 9229,
+      "request": "attach",
+      "type": "node",
+      "restart": true,
+      "address": "localhost",
+      "localRoot": "${workspaceFolder}",
+      "remoteRoot": "/usr/src/app",
+      "outFiles": ["${workspaceFolder}/build/**/**.js"],
+      "skipFiles": ["<node_internals>/**/*.js"],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "sourceMaps": true,
+      "protocol": "inspector"
+    },
+    {
+      "name": "Build Docker Node.js",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+          "run", "debug_docker"
+      ]
+    }
+  ]
+}
