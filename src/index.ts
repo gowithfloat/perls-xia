@@ -1,3 +1,3 @@
 import App from "./app";
-var app = new App();
+const app = new App();
 app.run();

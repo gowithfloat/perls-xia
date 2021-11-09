@@ -15,7 +15,7 @@ class DrupalJson {
       return;
     }
 
-    let mappedIncluded: { [key: string]: { [key: string]: DrupalDataItem}} = {};
+    const mappedIncluded: { [key: string]: { [key: string]: DrupalDataItem}} = {};
     included?.forEach((includedItem) => {
       if (!includedItem.type || !includedItem.id) {
         return;
@@ -32,23 +32,25 @@ class DrupalJson {
         return;
       }
 
-      Object.keys(item.relationships).forEach((relationshipKey, relationshipIndex) => {
+      Object.keys(item.relationships).forEach((relationshipKey) => {
         if (!item.relationships || !item.relationships[relationshipKey]) {
           return;
         }
-        var itemData = item.relationships[relationshipKey].data;
+        const itemData = item.relationships[relationshipKey].data;
         if (!itemData) {
           return;
         }
 
         if (Array.isArray(itemData)) {
           itemData.forEach((d, dIndex) => {
-            (self.data[dataIndex].relationships![relationshipKey].data as DrupalDataItem[])[dIndex] = self.lookupIncluded(d, mappedIncluded);
+            const data = self.data[dataIndex].relationships || {};
+            (data[relationshipKey].data as DrupalDataItem[])[dIndex] = self.lookupIncluded(d, mappedIncluded);
           });
         }
 
         if ("type" in itemData) {
-          self.data[dataIndex].relationships![relationshipKey].data = self.lookupIncluded(itemData as DrupalDataItem, mappedIncluded);
+          const data = self.data[dataIndex].relationships || {};
+          data[relationshipKey].data = self.lookupIncluded(itemData as DrupalDataItem, mappedIncluded);
           return;
         }
       });

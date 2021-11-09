@@ -1,11 +1,11 @@
 import OAuthWebservice from './webservice/oauth_webservice';
 import DrupalJson, { DrupalDataItem, DrupalJsonApi } from './drupal_json_deserializer';
-import JsonMapper from './mapper';
-import { Schema, Validator } from 'jsonschema';
+import JsonMapper, { MappedItemsArray, Mapper } from './mapper';
+import { Schema, Validator, ValidatorResult } from 'jsonschema';
 import { exit } from "process";
-var sourceSchema = require('./schema/jsonapi.json');
-var mapping = require('./schema/mapping.json');
-var destinationSchema = require('./schema/p2881.json');
+import sourceSchema from './schema/jsonapi.json';
+import mapping from './schema/mapping.json';
+import destinationSchema from './schema/p2881.json';
 
 class App {
 
@@ -14,12 +14,22 @@ class App {
 
   constructor() {
     this.validator = new Validator();
+    if (!process.env.SOURCE_HOST ||
+      !process.env.SOUCRE_USERNAME ||
+      !process.env.SOURCE_PASSWORD ||
+      !process.env.SOURCE_CLIENT_ID ||
+      !process.env.SOURCE_CLIENT_SECRET) {
+        this.outputToConsole('Invalid source properties', 'error');
+        exit(-1);
+
+    }
+
     this.sourceWebService = new OAuthWebservice(
-      process.env.SOURCE_HOST!,
-      process.env.SOUCRE_USERNAME!,
-      process.env.SOURCE_PASSWORD!,
-      process.env.SOURCE_CLIENT_ID!,
-      process.env.SOURCE_CLIENT_SECRET!);
+      process.env.SOURCE_HOST,
+      process.env.SOUCRE_USERNAME,
+      process.env.SOURCE_PASSWORD,
+      process.env.SOURCE_CLIENT_ID,
+      process.env.SOURCE_CLIENT_SECRET);
   }
 
   async run() {
@@ -36,7 +46,7 @@ class App {
       }
       const sourceValidated = this.validateData(sourceJSONData, sourceSchema);
       if (!sourceValidated.valid) {
-        console.error(sourceValidated.errors);
+        this.outputToConsole(sourceValidated.errors, 'error');
         exit(1);
       }
       const drupalData: DrupalJson = new DrupalJson(sourceJSONData as DrupalJsonApi);
@@ -46,78 +56,91 @@ class App {
     }
 
     const transformationMapping = this.getTransformationMapping();
-    const destinationData = await this.transformSourceData(sourceData, transformationMapping);
+    const destinationData = await this.transformSourceData(sourceData, transformationMapping as Mapper);
     const destinationSchema = await this.getDestinationSchema();
     const destinationValidated = this.validateData(destinationData, destinationSchema);
     if (!destinationValidated.valid) {
-      console.error(destinationValidated.errors);
+      this.outputToConsole(destinationValidated.errors, 'error');
       exit(2);
     }
-
-    this.outputDestinationData(destinationData);
     await this.sendDestinationData(destinationData);
     exit();
   }
 
-  private async getSourceJSONData(url: string): Promise<any> {
+  private async getSourceJSONData(url: string): Promise<unknown> {
     // Request
-    console.log('requesting data');
+    this.outputToConsole('requesting data');
     try {
       return await this.sourceWebService.authenicatedRequest(url);
     } catch (error) {
-      console.error(error);
+      this.outputToConsole(error, 'error');
     }
   }
 
   private async getSourceSchema(): Promise<Schema> {
     // Get schema
-    console.log('requesting source schema');
+    this.outputToConsole('requesting source schema');
     return sourceSchema;
   }
 
-  private validateData(data: any, schema: Schema): any {
+  private validateData(data: unknown, schema: Schema): ValidatorResult {
     // Validate
-    console.log('validating data');
+    this.outputToConsole('validating data');
     return this.validator.validate(data, schema);
   }
 
-  private getTransformationMapping(): any {
+  private getTransformationMapping(): unknown {
     // Get mapping
-    console.log('requesting source to destination mapping');
+    this.outputToConsole('requesting source to destination mapping');
     return mapping;
   }
 
-  private transformSourceData(sourceData: any, mapping: any): any {
+  private transformSourceData(sourceData: DrupalDataItem[], mapping: Mapper): unknown {
     // Transform
-    console.log('transforming source to destination');
-    const mapper = new JsonMapper(sourceData, mapping);
+    this.outputToConsole('transforming source to destination');
+    const data = (sourceData as unknown) as MappedItemsArray;
+    const mapper = new JsonMapper(data, mapping);
     mapper.mapToDestination();
     return mapper.destination;
   }
 
-  private async getDestinationSchema(): Promise<any> {
+  private async getDestinationSchema(): Promise<Schema> {
     // Get P2881 Schema
-    console.log('requesting destination schema');
+    this.outputToConsole('requesting destination schema');
     return destinationSchema;
   }
 
-  private outputDestinationData(data: object) {
-    // Output
-    console.log('Outputting data');
-    console.log(data);
-
-  }
-
-  private async sendDestinationData(data: object) {
+  private async sendDestinationData(data: unknown) {
+    this.outputToConsole(data);
     if (!process.env.DESTINATION_ENDPOINT) {
-      return
+      return;
     }
     // Send
-    console.log('sending output');
+    this.outputToConsole('sending output');
     try {
       await this.sourceWebService.request('/');
     } catch (error) {
-      console.log(error);
+      this.outputToConsole(error, 'error');
+    }
+  }
+
+  private outputToConsole(output: unknown, type = 'verbose') {
+    if (!process.env.CONSOLE_OUTPUT) {
+      return false;
+    }
+
+    switch (process.env.CONSOLE_OUTPUT) {
+      case "verbose":
+        type == 'verbose' ? console.log(output) : console.error(output);
+        break;
+      case "error":
+        if (type != 'error') {
+          break;
+        }
+        console.error(output);
+        break;
+      default:
+        return;
     }
   }
 }

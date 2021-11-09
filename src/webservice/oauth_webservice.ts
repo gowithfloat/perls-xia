@@ -1,5 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosPromise } from 'axios';
-var FormData = require('form-data');
+import axios from 'axios';
 
 class OAuthWebservice {
 
@@ -35,47 +34,37 @@ class OAuthWebservice {
     };
 
 
-    var formData = Object.entries(data).map(function(d) {
-      return encodeURIComponent(d[0]) + '=' + encodeURIComponent(d[1])
-    }).join('&')
-
-    try {
-      const response = await axios.post<string, ServerResponse>(`${host}/oauth/token`, formData, {
-        withCredentials: true
-      });
-      this.access_token = response.data["access_token"];
-    } catch (error) {
-      console.error(error);
-
-    }
+    const formData = Object.entries(data).map(function(d) {
+      return encodeURIComponent(d[0]) + '=' + encodeURIComponent(d[1]);
+    }).join('&');
+    const response = await axios.post<string, ServerResponse<OAuth2Response>>(`${host}/oauth/token`, formData, {
+      withCredentials: true
+    });
+    this.access_token = response.data.access_token;
   }
 
 
-  async authenicatedRequest(url: string): Promise<any> {
+  async authenicatedRequest(url: string): Promise<unknown> {
     if (!this.access_token) {
       await this.getAuthentication();
     }
 
-    try {
-      const response = await axios.get(`${this.host}${url}`, {
-        headers: {
-          "Authorization": `Bearer ${this.access_token}`,
-          "Accept": "*/*"
-        }
-      });
-      return response.data;
-    } catch (error) {
-      console.error(error);
-    }
+    const response = await axios.get(`${this.host}${url}`, {
+      headers: {
+        "Authorization": `Bearer ${this.access_token}`,
+        "Accept": "*/*"
+      }
+    });
+    return response.data;
   }
 
-  async request(url: string): Promise<any> {
+  async request(url: string): Promise<unknown> {
     return await axios.get(`${this.host}${url}`);
   }
 }
 
-interface ServerResponse {
-  data: any
+interface ServerResponse<T> {
+  data: T
 }
 
 interface OAuth2Request {
@@ -84,6 +73,11 @@ interface OAuth2Request {
   client_secret: string,
   username: string,
   password: string
+}
+
+interface OAuth2Response {
+  access_token: string,
+  refresh_token: string
 }
 
 export default OAuthWebservice;
