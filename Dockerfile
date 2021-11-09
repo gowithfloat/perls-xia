@@ -1,4 +1,4 @@
-FROM node:14-alpine as base
+FROM node:16.13.0-alpine as base
 WORKDIR /usr/src/app
 COPY ["package.json", "package-lock.json*", "tsconfig.json", "./"]
 COPY ["./src/", "./src"]
