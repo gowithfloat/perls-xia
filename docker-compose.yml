@@ -6,6 +6,9 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
+      args:
+         - NODE_BUILD_ENV=production
     env_file:
       - ./.env
+    command: ["npm", "start"]
 

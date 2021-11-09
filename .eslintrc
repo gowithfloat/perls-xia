@@ -24,5 +24,5 @@
         }
       ]
     },
-    "ignorePatterns": ["src/schema/**", "src/build/*"]
+    "ignorePatterns": ["src/schema/**", "src/dist/*"]
 }

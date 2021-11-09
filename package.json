@@ -2,13 +2,13 @@
   "name": "xia-perls",
   "version": "1.0.0",
   "description": "Experience Agent for PERLS",
-  "main": "build/index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "start": "NODE_PATH=./build node build/index.js",
-    "build": "tsc -p .",
+    "start": "NODE_PATH=./dist node dist/index.js",
+    "build": "./node_modules/.bin/tsc -p .",
     "debug_docker": "docker compose -f docker-compose.debug.yml up -d --build",
-    "watch": "cp -R ./src/schema ./build/ && tsc -w -p .",
-    "debug": "nodemon --watch ./build --inspect-brk=0.0.0.0:9229 --nolazy ./build/index.js"
+    "watch": "cp -R ./src/schema ./dist/ && tsc -w -p .",
+    "debug": "nodemon --watch ./dist --inspect-brk=0.0.0.0:9229 --nolazy ./dist/index.js"
   },
   "keywords": [
     "xia",
