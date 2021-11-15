@@ -16,7 +16,7 @@ export default class JsonMapper {
       Object.keys(self.mapper).forEach((mapKey) => {
         const sourceKey = self.mapper[mapKey];
         const value = self.getValueFromSource(sourceKey, sourceItem as MappedItem);
-        self.toDestationObject(mapKey, value, destinationItem);
+        self.toDestinationObject(mapKey, value, destinationItem);
       });
     });
     this.destination = destinationItem;
@@ -51,7 +51,7 @@ export default class JsonMapper {
     return sourceObject as string[]|string;
   }
 
-  private toDestationObject(path: string, value: string|string[], obj: MappedItem|MappedItemArrayValue) {
+  private toDestinationObject(path: string, value: string|string[], obj: MappedItem|MappedItemArrayValue) {
     const parts = path.split(".");
     let part: string | undefined;
     const last = parts.pop();
@@ -77,7 +77,7 @@ export default class JsonMapper {
         if (trailingPath.includes('[]') && part) {
           const index = (obj[part] as MappedItemsArray).length > 1 ? (obj[part] as MappedItemsArray).length - 1 : 0;
           const arrayObject = (obj[part] as MappedItemsArray)[index] || {};
-          self.toDestationObject(trailingPath, value, arrayObject);
+          self.toDestinationObject(trailingPath, value, arrayObject);
           (obj[part] as MappedItem)[index] = arrayObject;
           return;
         }
@@ -87,7 +87,7 @@ export default class JsonMapper {
             return;
           }
           const arrayObject = (obj[part] as MappedItemsArray)[index] || {};
-          self.toDestationObject(trailingPath, v, arrayObject);
+          self.toDestinationObject(trailingPath, v, arrayObject);
           (obj[part] as MappedItemsArray)[index] = arrayObject;
         });
         return;

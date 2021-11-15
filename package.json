@@ -1,7 +1,7 @@
 {
-  "name": "xia-perls",
+  "name": "perls-xia",
   "version": "1.0.0",
-  "description": "Experience Agent for PERLS",
+  "description": "eXperience Agent for PERLS",
   "main": "dist/index.js",
   "scripts": {
     "start": "NODE_PATH=./dist node dist/index.js",
@@ -20,7 +20,6 @@
   "author": "Float LLC",
   "license": "MIT",
   "devDependencies": {
-    "@types/jsonapi-serializer": "^3.6.5",
     "@types/node": "^16.10.3",
     "@typescript-eslint/eslint-plugin": "^5.3.1",
     "@typescript-eslint/parser": "^5.3.1",

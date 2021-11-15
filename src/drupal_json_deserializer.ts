@@ -15,7 +15,7 @@ class DrupalJson {
       return;
     }
 
-    const mappedIncluded: { [key: string]: { [key: string]: DrupalDataItem}} = {};
+    const mappedIncluded: DrupalIncludes = {};
     included?.forEach((includedItem) => {
       if (!includedItem.type || !includedItem.id) {
         return;
@@ -31,7 +31,6 @@ class DrupalJson {
       if(!item.relationships) {
         return;
       }
-
       Object.keys(item.relationships).forEach((relationshipKey) => {
         if (!item.relationships || !item.relationships[relationshipKey]) {
           return;
@@ -57,7 +56,7 @@ class DrupalJson {
     });
   }
 
-  private lookupIncluded(itemData: DrupalDataItem, mappedIncluded: { [key: string]: { [key: string]: DrupalDataItem }}): DrupalDataItem {
+  private lookupIncluded(itemData: DrupalDataItem, mappedIncluded: DrupalIncludes): DrupalDataItem {
     const itemType = itemData.type;
     const itemId = itemData.id;
     if (!itemType || !itemId) {
@@ -110,15 +109,18 @@ interface DrupalDataAttribute {
   default_langcode: boolean;
   revision_translation_affected: boolean;
   path: { alias: string; pid: number; langcode: string; }|undefined;
-  field_current_until: string|undefined;
-  field_description: string|undefined;
-  field_new: string|undefined;
 }
 
 interface DrupalDataRelationship {
   [key: string]: {
     data: DrupalDataItem|DrupalDataItem[]|undefined;
     links: DrupalDataLinks;
+  }
+}
+
+interface DrupalIncludes {
+  [key: string]: {
+    [key: string]: DrupalDataItem
   }
 }
 

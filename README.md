@@ -1,4 +1,4 @@
-# Drupal JSON API eXperience Indexing Agent
+# eXperience Indexing Agent for PERLS
 
 This project implements an Experience Indexing Agent (XIA). This XIA takes source data that provides a JSON:API input and transforms it
 into a P2881 JSON format.
@@ -7,7 +7,7 @@ into a P2881 JSON format.
 
 This code is written in Typescript that is compiled into JS. A NodeJS Docker container is used to run the compiled program.
 
-## Getting Started
+### Getting Started
 
 `cp .env.example .env` # Copy .env.example to .env and edit Environment variables accordingly.
 
@@ -19,3 +19,7 @@ This code is written in Typescript that is compiled into JS. A NodeJS Docker con
 
 Using Visual Studio Code, you can run the launch configuration, "Launch Node Debugger", which watches for TS changes as well as listens to
 node debugging (port 9229) to be able to stop on breakpoints. Then run the "Build Docker Node.js" to build and start the application.
+
+## Production
+
+

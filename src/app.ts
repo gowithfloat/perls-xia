@@ -55,6 +55,7 @@ class App {
       url = url?.replace(this.sourceWebService.host, '');
     }
 
+
     const transformationMapping = this.getTransformationMapping();
     const destinationData = await this.transformSourceData(sourceData, transformationMapping as Mapper);
     const destinationSchema = await this.getDestinationSchema();
