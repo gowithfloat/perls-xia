@@ -1,57 +1,43 @@
+import * as Mappers from './mapping/';
+import { MappedItem, MapSourceKey } from './mapping/interface';
+
 export default class JsonMapper {
-  source: MappedItemsArray;
-  mapper: Mapper;
-  destination: unknown;
 
-  constructor(source: MappedItemsArray, mapper: Mapper) {
-    this.source = source;
-    this.mapper = mapper;
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  private constructor() {}
+
+  private static createInstance(className: string) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return new (<any>Mappers)[className]();
   }
 
-  mapToDestination(): void {
-    const destinationItem = {};
-    // Map destination structure
-    const self = this;
-    this.source.forEach((sourceItem) => {
-      Object.keys(self.mapper).forEach((mapKey) => {
-        const sourceKey = self.mapper[mapKey];
-        const value = self.getValueFromSource(sourceKey, sourceItem as MappedItem);
-        self.toDestinationObject(mapKey, value, destinationItem);
-      });
-    });
-    this.destination = destinationItem;
+  /**
+   * Recursively finds a value (or null) from source data for a given key.
+   * It uses different mappers to perform different transformations
+   * based on the type within the mapper file.
+   * @param sourceKey The key to which to traverse to find a value.
+   * @param sourceItem The data where to get the value.
+   * @returns A string or string[] if the value is found. Undefined if the key is not found.
+   */
+  static getValueFromSource(sourceKey: MapSourceKey|string, sourceItem: MappedItem): string[]|string|undefined {
+      const source: MapSourceKey = typeof sourceKey == "object" ?
+      sourceKey :
+      {
+        "type": "string",
+        "value": sourceKey
+      };
+    const mapType = `${JsonMapper.capitalize(source.type)}Mapping`;
+    const mapper = JsonMapper.createInstance(mapType) as Mappers.MappingInterface;
+    return mapper.getValue(source, sourceItem);
   }
 
-  private getValueFromSource(sourceKey: string, sourceItem: MappedItem): string[]|string {
-    if (sourceKey.startsWith('STATIC::')) {
-      return sourceKey.replace('STATIC::', '');
-    }
-    const keys = sourceKey.split('.');
-    let i = 0;
-    let sourceObject: unknown = sourceItem;
-
-    while (i < keys.length) {
-      let key = keys[i];
-      if (key.includes('[]')) {
-        key = key.replace('[]', '');
-        const self = this;
-        const elements = keys.splice(i + 1, keys.length).join('.');
-        sourceObject = ((sourceObject as MappedItem)[key]) as MappedItemsArray;
-        sourceObject = (sourceObject as MappedItemsArray).map((item) => {
-          return self.getValueFromSource(elements, item as MappedItem) as string[]|string;
-        });
-        i = keys.length;
-        continue;
-      }
-
-      sourceObject = (sourceObject as MappedItem)[key] as MappedItem;
-      i++;
-    }
-
-    return sourceObject as string[]|string;
-  }
-
-  private toDestinationObject(path: string, value: string|string[], obj: MappedItem|MappedItemArrayValue) {
+  /**
+   * Recursively maps data to a particular destination path.
+   * @param path The path to which to store the data.
+   * @param value The value to store at the path.
+   * @param obj The object to which to map the values.
+   */
+  static mapValueToDestinationObject(path: string, value: string|string[], obj: MappedItem) {
     const parts = path.split(".");
     let part: string | undefined;
     const last = parts.pop();
@@ -75,10 +61,10 @@ export default class JsonMapper {
 
         // Only iterate on the last array on the path
         if (trailingPath.includes('[]') && part) {
-          const index = (obj[part] as MappedItemsArray).length > 1 ? (obj[part] as MappedItemsArray).length - 1 : 0;
-          const arrayObject = (obj[part] as MappedItemsArray)[index] || {};
-          self.toDestinationObject(trailingPath, value, arrayObject);
-          (obj[part] as MappedItem)[index] = arrayObject;
+          const index = (obj[part] as MappedItem[]).length > 1 ? (obj[part] as MappedItem[]).length - 1 : 0;
+          const arrayObject = (obj[part] as MappedItem[])[index] || {};
+          self.mapValueToDestinationObject(trailingPath, value, arrayObject);
+          (obj[part] as MappedItem[])[index] = arrayObject;
           return;
         }
 
@@ -86,31 +72,22 @@ export default class JsonMapper {
           if (!part || !obj[part]) {
             return;
           }
-          const arrayObject = (obj[part] as MappedItemsArray)[index] || {};
-          self.toDestinationObject(trailingPath, v, arrayObject);
-          (obj[part] as MappedItemsArray)[index] = arrayObject;
+          const arrayObject = (obj[part] as MappedItem[])[index] || {};
+          self.mapValueToDestinationObject(trailingPath, v, arrayObject);
+          (obj[part] as MappedItem[])[index] = arrayObject;
         });
         return;
       }
       else if (typeof obj[part] != "object") {
         obj[part] = {};
       }
-      obj = obj[part] as MappedItem|MappedItemArrayValue;
+      obj = obj[part] as MappedItem;
       part = parts.shift();
     }
-    obj[last] = value;
+    (obj[last] as string | string[]) = value;
+  }
+
+  private static capitalize(s: string) {
+      return s[0].toUpperCase() + s.slice(1);
   }
 }
-
-export interface MappedItemGeneric<T> {
-  [key: string]: T;
-}
-
-export type Mapper = MappedItemGeneric<string>;
-
-// JSON object
-export type MappedItem = MappedItemGeneric<unknown>;
-// JSON array
-export type MappedItemsArray = MappedItemGeneric<unknown>[];
-// JSON object of array
-export type MappedItemArrayValue = MappedItemGeneric<MappedItemsArray>;

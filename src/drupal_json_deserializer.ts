@@ -1,22 +1,64 @@
-class DrupalJson {
+/**
+ * This deserializes the JSON:API response
+ * by automatically including the relationships
+ * the request contains.
+ */
+class JsonAPIDeserializer {
 
-  data: DrupalDataItem[];
-  included: DrupalDataItem[]|undefined;
+  data: DataItem[];
+  included: DataItem[]|undefined;
   nextPage: string|undefined;
 
-  constructor(json: DrupalJsonApi) {
+  constructor(json: JsonApi) {
     this.data = json.data;
     this.mapIncludedData(json.included);
     this.nextPage = json.links?.next?.href;
   }
 
-  private mapIncludedData(included: DrupalDataItem[]|undefined): void {
+  private mapIncludedData(included: DataItem[]|undefined): void {
     if (!this.data || !included) {
       return;
     }
 
-    const mappedIncluded: DrupalIncludes = {};
+    const mappedIncluded: Includes = {};
+    const self = this;
     included?.forEach((includedItem) => {
+      // Map relationships inside included
+      if(includedItem.relationships) {
+        Object.keys(includedItem.relationships).forEach((relationshipKey) => {
+          if (!includedItem.relationships || !includedItem.relationships[relationshipKey]) {
+            return;
+          }
+          const itemData = includedItem.relationships[relationshipKey].data;
+          if (!itemData) {
+            return;
+          }
+
+          if (Array.isArray(itemData)) {
+            itemData.forEach((d, dIndex) => {
+              if (!includedItem.relationships) {
+                return;
+              }
+              const value = included.find((i) => {
+                return i.id == itemData[dIndex].id && i.type == itemData[dIndex].type;
+              });
+              if (!value) {
+                return;
+              }
+              (includedItem.relationships[relationshipKey].data as DataItem[])[dIndex] = value;
+            });
+          }
+
+          if ("type" in itemData) {
+            const value = included.find((i) => {
+              return i.id == itemData.id && i.type == itemData.type;
+            });
+            includedItem.relationships[relationshipKey].data = value;
+            return;
+          }
+        });
+      }
+
       if (!includedItem.type || !includedItem.id) {
         return;
       }
@@ -26,7 +68,7 @@ class DrupalJson {
       mappedIncluded[includedItem.type][includedItem.id] = includedItem;
     });
 
-    const self = this;
+    // Map [included] relationships for data.
     this.data.forEach((item, dataIndex) => {
       if(!item.relationships) {
         return;
@@ -43,20 +85,20 @@ class DrupalJson {
         if (Array.isArray(itemData)) {
           itemData.forEach((d, dIndex) => {
             const data = self.data[dataIndex].relationships || {};
-            (data[relationshipKey].data as DrupalDataItem[])[dIndex] = self.lookupIncluded(d, mappedIncluded);
+            (data[relationshipKey].data as DataItem[])[dIndex] = self.lookupIncluded(d, mappedIncluded);
           });
         }
 
         if ("type" in itemData) {
           const data = self.data[dataIndex].relationships || {};
-          data[relationshipKey].data = self.lookupIncluded(itemData as DrupalDataItem, mappedIncluded);
+          data[relationshipKey].data = self.lookupIncluded(itemData as DataItem, mappedIncluded);
           return;
         }
       });
     });
   }
 
-  private lookupIncluded(itemData: DrupalDataItem, mappedIncluded: DrupalIncludes): DrupalDataItem {
+  private lookupIncluded(itemData: DataItem, mappedIncluded: Includes): DataItem {
     const itemType = itemData.type;
     const itemId = itemData.id;
     if (!itemType || !itemId) {
@@ -70,58 +112,40 @@ class DrupalJson {
   }
 }
 
-export interface DrupalJsonApi {
-  data: DrupalDataItem[];
-  included: DrupalDataItem[]|undefined;
-  links: DrupalDataLinks|undefined;
+export interface JsonApi {
+  data: DataItem[];
+  included: DataItem[]|undefined;
+  links: DataLinks|undefined;
 }
 
-export interface DrupalDataItem {
+export interface DataItem {
   type: string|undefined;
   id: string|undefined;
-  links: DrupalDataLinks|undefined;
-  attributes: DrupalDataAttribute|undefined;
-  relationships: DrupalDataRelationship|undefined;
+  links: DataLinks|undefined;
+  relationships: DataRelationship|undefined;
 }
 
-interface DrupalDataLinks {
-  self: DrupalDataLink|undefined;
-  related: DrupalDataLink|undefined;
-  next: DrupalDataLink|undefined;
+interface DataLinks {
+  self: DataLink|undefined;
+  related: DataLink|undefined;
+  next: DataLink|undefined;
 }
 
-interface DrupalDataLink {
+interface DataLink {
   href: string|undefined;
 }
 
-interface DrupalDataAttribute {
-  drupal_internal__nid: number;
-  drupal_internal__vid: number;
-  langcode: string;
-  revision_timestamp: string;
-  revision_log: string|undefined;
-  status: boolean;
-  title: string;
-  created: string;
-  changed: string;
-  promote: boolean;
-  sticky: boolean;
-  default_langcode: boolean;
-  revision_translation_affected: boolean;
-  path: { alias: string; pid: number; langcode: string; }|undefined;
-}
-
-interface DrupalDataRelationship {
+interface DataRelationship {
   [key: string]: {
-    data: DrupalDataItem|DrupalDataItem[]|undefined;
-    links: DrupalDataLinks;
+    data: DataItem|DataItem[]|undefined;
+    links: DataLinks;
   }
 }
 
-interface DrupalIncludes {
+interface Includes {
   [key: string]: {
-    [key: string]: DrupalDataItem
+    [key: string]: DataItem
   }
 }
 
-export default DrupalJson;
+export default JsonAPIDeserializer;
