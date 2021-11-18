@@ -3,23 +3,61 @@
 This project implements an Experience Indexing Agent (XIA). This XIA takes source data that provides a JSON:API input and transforms it
 into a P2881 JSON format.
 
-## Development
+## Getting Started
+
+### Requirements
+
+* Docker
 
 This code is written in Typescript that is compiled into JS. A NodeJS Docker container is used to run the compiled program.
 
-### Getting Started
+### Development
 
-`cp .env.example .env` # Copy .env.example to .env and edit Environment variables accordingly.
+```(sh)
+# Copy .env.example to .env and edit Environment variables accordingly.
+cp .env.example .env
 
-`npm install` # Install the proper dependencies.
+# Install the proper dependencies.
+npm install
 
-`npm run debug_docker` # Build and start the docker container for debugging.
+# Watch the TypeScript files for changes and automatically re-compiles to JavaScript.
+npm run watch
 
-`npm run watch` # Watch the TypeScript files for changes and automatically re-compiles to JavaScript.
+# Build and start the docker container for debugging.
+# Opens port 9229 of the container to debug the Node program
+npm run debug_docker
+```
 
-Using Visual Studio Code, you can run the launch configuration, "Launch Node Debugger", which watches for TS changes as well as listens to
-node debugging (port 9229) to be able to stop on breakpoints. Then run the "Build Docker Node.js" to build and start the application.
+#### Visual Studio Code
 
-## Production
+If you use Visual Studio Code, you can run the launch configuration, "Launch Node Debugger", which watches for TS changes as well as listens to
+node debugging (port 9229) to be able to stop on breakpoints. Then run the "Build Docker Node.js" to build and start the application. If the dist directory
+in the Docker container is mounted locally, you may have to compile/watch for the program to execute.
 
+### Production
+
+The production version is built to run in a standalone container.
+
+```(sh)
+# Copy .env.example to .env and edit Environment variables accordingly. Ensure the NODE_ENV is set to production.
+cp .env.example .env
+
+# To build and run the container
+docker compose up -d --build
+```
+
+To run the container (assumes the container has already been built)
+
+`docker compose up -d`
+
+## How It Works
+
+Based on the [edX XIA workfow](https://github.com/OpenLXP/openlxp-xia-edx), this agent accepts JSON:API and transforms into the P2881 JSON format.
+
+* Extract: Downloads source data from a JSON:API datasource
+* Validate: Validates the data against the JSON:API schema
+* Transform: Maps the source data to a Learning Experience, these experiences are then added to a Learning Experience set
+* Validate: Validates the final mapped data to the P2881 JSON schema
+* Log: Outputs error and debug information
+* Load: **Coming soon** Pushes the data to a XIS
 
