@@ -10,7 +10,7 @@
       "address": "localhost",
       "localRoot": "${workspaceFolder}",
       "remoteRoot": "/usr/src/app",
-      "outFiles": ["${workspaceFolder}/build/**/**.js"],
+      "outFiles": ["${workspaceFolder}/dist/**/**.js"],
       "skipFiles": ["<node_internals>/**/*.js"],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
