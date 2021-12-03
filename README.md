@@ -61,3 +61,20 @@ Based on the [edX XIA workfow](https://github.com/OpenLXP/openlxp-xia-edx), this
 * Log: Outputs error and debug information
 * Load: **Coming soon** Pushes the data to a XIS
 
+## Environment Variables
+
+### Build Environment Information
+
+These are used to determine the build environment and how the information should be outputted.
+
+* NODE_ENV - The NodeJS environment. The options are development or production. This also dictates how statements are outputted (console.log or stdout)
+* CONSOLE_OUTPUT - The level of statements outputted. The options are verbose or error.
+
+### Source Endpoint Information
+
+The source endpoint assumes OAuth2 Client Credentials Authentication.
+
+* SOURCE_HOST - The source hostname
+* SOURCE_CLIENT_ID - The source OAuth2 client identifier
+* SOURCE_CLIENT_SECRET - The source OAuth2 client secret
+* SOURCE_ENDPOINT - The source endpoint that the supplies JSON:API to be mapped
