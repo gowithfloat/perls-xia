@@ -46,6 +46,9 @@ export abstract class BaseMapping {
       return;
     }
     return sourceArray.map((item) => {
+      if (typeof item === "string") {
+        return item;
+      }
       return self.getValueFromKey(elements, item) as string;
     });
   }

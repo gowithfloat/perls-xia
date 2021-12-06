@@ -3,6 +3,7 @@ import { MappedItem, MapSourceKey } from './mapping/interface';
 
 export default class JsonMapper {
 
+  /* istanbul ignore next */ // https://stackoverflow.com/a/59101498
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}
 
@@ -26,7 +27,8 @@ export default class JsonMapper {
         "type": "string",
         "value": sourceKey
       };
-    const mapType = `${JsonMapper.capitalize(source.type)}Mapping`;
+    const className = source.type[0].toUpperCase() + source.type.slice(1);
+    const mapType = `${className}Mapping`;
     const mapper = JsonMapper.createInstance(mapType) as Mappers.MappingInterface;
     return mapper.getValue(source, sourceItem);
   }
@@ -40,7 +42,7 @@ export default class JsonMapper {
   static mapValueToDestinationObject(path: string, value: string|string[], obj: MappedItem) {
     const parts = path.split(".");
     let part: string | undefined;
-    const last = parts.pop();
+    let last = parts.pop();
     if (!last) {
       return;
     }
@@ -48,7 +50,11 @@ export default class JsonMapper {
     while(part) {
       if (part.includes('[]')) {
         part = part.replace('[]', '');
+        if (!part || part.length === 0) {
+          return;
+        }
         let arrayValue = value;
+
         if (!obj[part] || !Array.isArray(obj[part])) {
           obj[part] = [];
         }
@@ -60,21 +66,19 @@ export default class JsonMapper {
         const trailingPath = path.slice(path.indexOf(`${part}[]`) + `${part}[].`.length, path.length);
 
         // Only iterate on the last array on the path
-        if (trailingPath.includes('[]') && part) {
+        if (trailingPath.includes('[]')) {
           const index = (obj[part] as MappedItem[]).length > 1 ? (obj[part] as MappedItem[]).length - 1 : 0;
           const arrayObject = (obj[part] as MappedItem[])[index] || {};
           self.mapValueToDestinationObject(trailingPath, value, arrayObject);
           (obj[part] as MappedItem[])[index] = arrayObject;
           return;
         }
-
+        // We check if part if undefined or empty above
+        const validatedPart: string = part;
         arrayValue.forEach((v: string|string[], index: number) => {
-          if (!part || !obj[part]) {
-            return;
-          }
-          const arrayObject = (obj[part] as MappedItem[])[index] || {};
+          const arrayObject = (obj[validatedPart] as MappedItem[])[index] || {};
           self.mapValueToDestinationObject(trailingPath, v, arrayObject);
-          (obj[part] as MappedItem[])[index] = arrayObject;
+          (obj[validatedPart] as MappedItem[])[index] = arrayObject;
         });
         return;
       }
@@ -84,10 +88,14 @@ export default class JsonMapper {
       obj = obj[part] as MappedItem;
       part = parts.shift();
     }
+    // Special case when the mapping ends in []
+    // Assume the value should be an array
+    if (last.length > 2 && last.slice(-2) === "[]") {
+      last = last.slice(0, last.length - 2);
+      if (typeof value === "string") {
+        value = [value];
+      }
+    }
     (obj[last] as string | string[]) = value;
-  }
-
-  private static capitalize(s: string) {
-      return s[0].toUpperCase() + s.slice(1);
   }
 }
