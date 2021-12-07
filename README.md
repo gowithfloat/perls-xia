@@ -78,3 +78,24 @@ The source endpoint assumes OAuth2 Client Credentials Authentication.
 * SOURCE_CLIENT_ID - The source OAuth2 client identifier
 * SOURCE_CLIENT_SECRET - The source OAuth2 client secret
 * SOURCE_ENDPOINT - The source endpoint that the supplies JSON:API to be mapped
+
+## Tests
+
+There are certain unit tests within the `test` directory. These are written in TypeScript using
+[Mocha](https://mochajs.org/) and [Chai](https://www.chaijs.com/) Frameworks. This project also supports
+code coverage using [Istanbul](https://istanbul.js.org/).
+
+To run the tests:
+
+```(sh)
+npm run test
+
+# To run it manually
+ ./node_modules/.bin/mocha -r ts-node/register test/**/*.spec.ts
+```
+
+To run the tests and print out code coverage:
+
+```(sh)
+npm run code-coverage
+```

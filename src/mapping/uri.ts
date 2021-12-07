@@ -10,7 +10,15 @@ export class UriMapping extends BaseMapping implements MappingInterface {
     if (!uri) {
       return;
     }
-    const sourceObject = sourceKey.path ? `${process.env.SOURCE_HOST}${sourceKey.path}${uri}` : `${process.env.SOURCE_HOST}${uri}`;
+    if (Array.isArray(uri)) {
+      const self = this;
+      return uri.map((value) => self.createUri(sourceKey.path, value));
+    }
+    return this.createUri(sourceKey.path, uri);
+  }
+
+  private createUri(path: string|undefined, uri: string) : string {
+    const sourceObject = path ? `${process.env.SOURCE_HOST}${path}${uri}` : `${process.env.SOURCE_HOST}${uri}`;
     return sourceObject;
   }
 }

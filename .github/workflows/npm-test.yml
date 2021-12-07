@@ -1,0 +1,31 @@
+name: NodeJS with Mocha
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Use Node.js 16.3
+      uses: actions/setup-node@v2
+      with:
+        node-version: 16.3
+
+    - name: Build
+      run: |
+        npm install
+        ./node_modules/.bin/mocha --reporter json > test-results.json
+    
+    - name: Report Results
+      uses: actions/upload-artifact@v2
+      if: success() || failure()
+      with:
+        name: test-results
+        path: test-results.json
