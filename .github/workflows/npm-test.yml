@@ -21,4 +21,11 @@ jobs:
     - name: Build
       run: |
         npm install
-        npm run code-coverage
+        ./node_modules/.bin/mocha --reporter json > test-results.json
+    
+    - name: Report Results
+      uses: actions/upload-artifact@v2
+      if: success() || failure()
+      with:
+        name: test-results
+        path: test-results.json
