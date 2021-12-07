@@ -21,4 +21,4 @@ jobs:
     - name: Build
       run: |
         npm install
-        npm code-coverage
+        npm run code-coverage
