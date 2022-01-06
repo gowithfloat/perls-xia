@@ -1,6 +1,6 @@
 {
   "name": "perls-xia",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "eXperience Agent for PERLS",
   "main": "dist/index.js",
   "scripts": {

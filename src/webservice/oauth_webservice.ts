@@ -1,15 +1,15 @@
 import axios from 'axios';
+import Webservice from './webservice';
 
-class OAuthWebservice {
+class OAuthWebservice extends Webservice {
 
-  host: string
   client_id: string
   client_secret: string
 
   access_token: string|undefined;
 
   constructor(host: string, client_id: string, client_secret: string) {
-    this.host = host;
+    super(host);
     this.client_id = client_id;
     this.client_secret = client_secret;
   }
@@ -55,15 +55,6 @@ class OAuthWebservice {
       }
     });
     return response.data;
-  }
-
-  /**
-   * Basic request with no authentication.
-   * @param url The path of the URL to which to get information.
-   * @returns The response.
-   */
-  async request(url: string): Promise<unknown> {
-    return await axios.get(`${this.host}${url}`);
   }
 }
 
