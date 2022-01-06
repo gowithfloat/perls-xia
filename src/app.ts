@@ -1,4 +1,5 @@
 import OAuthWebservice from './webservice/oauth_webservice';
+import Webservice from './webservice/webservice';
 import JsonAPIDeserializer, { DataItem, JsonApi } from './drupal_json_deserializer';
 import JsonMapper from './mapper';
 import { MappedItem, Mapper } from './mapping/interface';
@@ -12,6 +13,7 @@ class App {
 
   validator: Validator;
   sourceWebService: OAuthWebservice;
+  destinationWebService: Webservice|undefined;
 
   constructor() {
     this.validator = new Validator();
@@ -20,13 +22,16 @@ class App {
       !process.env.SOURCE_CLIENT_SECRET) {
         this.outputToConsole('Invalid source properties', 'error');
         exit(-1);
-
     }
 
     this.sourceWebService = new OAuthWebservice(
       process.env.SOURCE_HOST,
       process.env.SOURCE_CLIENT_ID,
       process.env.SOURCE_CLIENT_SECRET);
+
+    if (process.env.DESTINATION_HOST) {
+      this.destinationWebService = new Webservice(process.env.DESTINATION_HOST);
+    }
   }
 
   /**
@@ -163,13 +168,17 @@ class App {
    * Outputs and/or sends the destination data.
    * @param data The formatted data.
    */
-  private async sendDestinationData(data: unknown) {
+  private async sendDestinationData(data: object) {
     this.outputToConsole(JSON.stringify(data, null, 2));
-    if (!process.env.DESTINATION_ENDPOINT) {
+    if (!this.destinationWebService || !process.env.DESTINATION_ENDPOINT) {
       return;
     }
-    // TODO: Send
     this.outputToConsole('sending output');
+    try {
+      this.destinationWebService.post(process.env.DESTINATION_ENDPOINT, data);
+    } catch (error) {
+      this.outputToConsole(error, 'error');
+    }
   }
 
   /**
