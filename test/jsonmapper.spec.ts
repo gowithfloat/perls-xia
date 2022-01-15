@@ -18,7 +18,7 @@ describe('JsonMapper Get Value functions', () => {
   it('should return test the selection of string mapper', () => {
     const mapping  = {
       "type": "string",
-      "value": "sourceKey",
+      "key": "sourceKey",
     };
     const result = JsonMapper.getValueFromSource(mapping, { sourceKey: "item" });
     expect(result).to.equal('item');
@@ -62,7 +62,7 @@ describe('JsonMapper Get Value functions', () => {
   it('should return undefined because the array key isn\'t defined', () => {
     const mapping  = {
       "type": "string",
-      "value": "sourceKey.nested1[]",
+      "key": "sourceKey.nested1[]",
     };
     const sourceItem = {
       "sourceKey": {
@@ -84,7 +84,7 @@ describe('JsonMapper Get Value functions', () => {
   it('should return undefined because the object key isn\'t defined', () => {
     const mapping  = {
       "type": "string",
-      "value": "sourceKey.nested",
+      "key": "sourceKey.nested",
     };
     const sourceItem = {
       "sourceKey": undefined
