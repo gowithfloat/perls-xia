@@ -8,6 +8,7 @@ import { exit } from "process";
 import sourceSchema from './schema/jsonapi.json';
 import mapping from './schema/mapping.json';
 import destinationSchema from './schema/p2881.json';
+import md5 from 'md5';
 
 class App {
 
@@ -41,9 +42,6 @@ class App {
     let url: string|undefined = process.env.SOURCE_ENDPOINT;
     const sourceSchema = await this.getSourceSchema();
     const transformationMapping = this.getTransformationMapping();
-    // Set up the destination object.
-    let destinationData: MappedItem = {"learning_experience_sets": []};
-
     // Loop through JSON:API pages. This will download the a single page,
     // then transforms the data by adding all of the included data,
     // then maps each source object within the page to a learning experience.
@@ -59,21 +57,26 @@ class App {
         this.outputToConsole(sourceValidated.errors, 'error');
         exit(1);
       }
+
       const jsonApiData = new JsonAPIDeserializer(sourceJSONData as JsonApi);
-      destinationData = await this.transformSourceData(jsonApiData.data, transformationMapping, destinationData);
+      const destinationData: MappedItem = await this.transformSourceData(jsonApiData.data, transformationMapping, {});
+      // Get the destination schema.
+      const destinationSchema = await this.getDestinationSchema();
+      const values = Object.values(destinationData);
+      for (let i = 0; i < values.length; i++) {
+        let value = values[i];
+        value = this.addHashes(value);
+        // Validate the destination data against the schema.
+        const destinationValidated = this.validateData(value, destinationSchema);
+        if (!destinationValidated.valid) {
+          this.outputToConsole(destinationValidated.errors, 'error');
+          exit(2);
+        }
+        await this.sendDestinationData(destinationData);
+      }
       url = jsonApiData.nextPage;
       url = url?.replace(this.sourceWebService.host, '');
     }
-
-    // Get the destination schema.
-    const destinationSchema = await this.getDestinationSchema();
-    // Validate the destination data against the schema.
-    const destinationValidated = this.validateData(destinationData, destinationSchema);
-    if (!destinationValidated.valid) {
-      this.outputToConsole(destinationValidated.errors, 'error');
-      exit(2);
-    }
-    await this.sendDestinationData(destinationData);
   }
 
   /**
@@ -135,17 +138,16 @@ class App {
   private transformSourceData(sourceData: DataItem[], mapFile: Mapper, destinationItem: MappedItem): MappedItem {
     // Transform
     this.outputToConsole('transforming source to destination');
-    const indexOffset = (destinationItem.learning_experience_sets as MappedItem[]).length;
     // Map destination structure
     sourceData.forEach((sourceItem, index) => {
-      (destinationItem.learning_experience_sets as MappedItem[])[index + indexOffset] = {};
+      destinationItem[index] = {};
       Object.keys(mapFile).forEach((mapKey) => {
         const sourceKey = mapFile[mapKey];
         const value = JsonMapper.getValueFromSource(sourceKey, (sourceItem as unknown) as MappedItem);
         if (!value) {
           return;
         }
-        JsonMapper.mapValueToDestinationObject(mapKey, value, (destinationItem.learning_experience_sets as MappedItem[])[index + indexOffset]);
+        JsonMapper.mapValueToDestinationObject(mapKey, value, destinationItem[index] as MappedItem);
       });
     });
 
@@ -162,6 +164,17 @@ class App {
     // Get P2881 Schema
     this.outputToConsole('requesting destination schema');
     return destinationSchema;
+  }
+
+  /**
+   * Adds metadata_key and metadata_key_hash.
+   * @param value The destination data.
+   * @returns The destination data with hash.
+   */
+  private addHashes(value: MappedItem): MappedItem {
+    value["metadata_key_hash"] = md5(value.metadata as string);
+    value["metadata_hash"] = md5(value.metadata_key as string);
+    return value;
   }
 
   /**

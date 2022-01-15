@@ -10,7 +10,7 @@ describe('StringMapper functions', () => {
   it('should return item', () => {
     const mapper = {
       type: "string",
-      value: "sourceKey"
+      key: "sourceKey"
     };
     const result = stringMapper.getValue(mapper, { sourceKey: "item" });
     expect(result).to.equal('item');
@@ -19,7 +19,7 @@ describe('StringMapper functions', () => {
   it('should return nested item', () => {
     const mapper = {
       type: "string",
-      value: "sourceKey.nested"
+      key: "sourceKey.nested"
     };
     const result = stringMapper.getValue(mapper, { sourceKey: {
       nested: "nested item"
@@ -30,7 +30,7 @@ describe('StringMapper functions', () => {
   it('should return array of items', () => {
     const mapper = {
       type: "string",
-      value: "sourceKey[].array"
+      key: "sourceKey[].array"
     };
     const result = stringMapper.getValue(mapper, { sourceKey: [{
       array: "array item one"
@@ -44,7 +44,7 @@ describe('StringMapper functions', () => {
   it('should return nested array', () => {
     const mapper = {
       type: "string",
-      value: "sourceKey.nested[]"
+      key: "sourceKey.nested[]"
     };
     const sourceItem = {
       "sourceKey": {
@@ -58,7 +58,7 @@ describe('StringMapper functions', () => {
   it('should return nested array of items', () => {
     const mapper = {
       type: "string",
-      value: "sourceKey.nested[].array"
+      key: "sourceKey.nested[].array"
     };
     const sourceItem = {
       "sourceKey": {
@@ -79,7 +79,7 @@ describe('StringMapper functions', () => {
   it('should return undefined because the key isn\'t defined', () => {
     const mapping  = {
       "type": "string",
-      "value": "sourceKey1"
+      "key": "sourceKey1"
     };
     const sourceItem = {
       "sourceKey": {
