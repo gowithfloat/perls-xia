@@ -25,7 +25,7 @@ export default class JsonMapper {
       sourceKey :
       {
         "type": "string",
-        "value": sourceKey
+        "key": sourceKey
       };
     const className = source.type[0].toUpperCase() + source.type.slice(1);
     const mapType = `${className}Mapping`;

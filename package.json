@@ -23,6 +23,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/chai": "^4.2.22",
+    "@types/md5": "^2.3.1",
     "@types/mocha": "^9.0.0",
     "@types/node": "^16.11.19",
     "@typescript-eslint/eslint-plugin": "^5.3.1",
@@ -42,6 +43,7 @@
   },
   "dependencies": {
     "axios": "^0.22.0",
-    "jsonschema": "^1.4.0"
+    "jsonschema": "^1.4.0",
+    "md5": "^2.3.0"
   }
 }
