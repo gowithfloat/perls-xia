@@ -65,6 +65,7 @@
   "metadata_key": {
     "type": "string",
     "key": "attributes.drupal_internal__nid",
-    "prefix": "PERLS "
+    "prefix": "PERLS ",
+    "suffix": "_PERLS"
   }
 }
