@@ -6,7 +6,7 @@
     "prefix": "PERLS "
   },
   "metadata.Course.CourseTitle": "attributes.title",
-  "metadata.CourseInstance.InLanguage": "attributes.langcode",
+  "metadata.Course_Instance.InLanguage": "attributes.langcode",
   "metadata.Course.CourseFullDescription": "attributes.field_description.value",
   "metadata.TechnicalInformation.Thumbnail": {
     "type": "uri",
@@ -17,11 +17,11 @@
     "key": "relationships.field_tags.data",
     "value": "tag"
   },
-  "metadata.CourseInstance.Instructor": {
+  "metadata.Course_Instance.Instructor": {
     "type": "static",
     "value": "Owner"
   },
-  "metadata.LifecycleInformation.Maintainer": {
+  "metadata.Lifecycle_Information.Maintainer": {
     "type": "static",
     "value": "Maintainer"
   },
@@ -42,25 +42,25 @@
     "value": "self-assessment"
   },
   "metadata.Course.ProviderName": {
-    "type": "static",
-    "value": "PERLS"
+    "type": "env",
+    "key": "PROVIDER"
   },
   "metadata.Course.AccreditedBy": {
     "type": "static",
     "value": "Organization"
   },
-  "metadata.CourseInstance.CourseURL": {
+  "metadata.Course_Instance.CourseURL": {
     "type": "uri",
     "uri": "attributes.drupal_internal__nid",
     "path": "/node/"
   },
-  "metadata.CourseInstance.DeliveryMode": {
+  "metadata.Course_Instance.DeliveryMode": {
     "type": "static",
     "value": "online"
   },
   "provider_name": {
-    "type": "static",
-    "value": "PERLS"
+    "type": "env",
+    "key": "PROVIDER"
   },
   "metadata_key": {
     "type": "string",

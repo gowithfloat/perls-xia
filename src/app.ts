@@ -42,6 +42,10 @@ class App {
     let url: string|undefined = process.env.SOURCE_ENDPOINT;
     const sourceSchema = await this.getSourceSchema();
     const transformationMapping = this.getTransformationMapping();
+
+    // Get current courses in provider
+    const currentRecords = await this.getCurrentDestinationRecords();
+
     // Loop through JSON:API pages. This will download the a single page,
     // then transforms the data by adding all of the included data,
     // then maps each source object within the page to a learning experience.
@@ -72,11 +76,12 @@ class App {
           this.outputToConsole(destinationValidated.errors, 'error');
           exit(2);
         }
-        await this.sendDestinationData(destinationData);
+        await this.sendDestinationData(value, currentRecords as MappedItem[]);
       }
       url = jsonApiData.nextPage;
       url = url?.replace(this.sourceWebService.host, '');
     }
+    await this.submitDestinationData();
   }
 
   /**
@@ -104,6 +109,27 @@ class App {
     // Get schema
     this.outputToConsole('requesting source schema');
     return sourceSchema;
+  }
+
+  /**
+   * Gets the source schema;
+   * intentionally an async method if the
+   * schema lives outside this agent.
+   * @returns The source schema.
+   */
+   private async getCurrentDestinationRecords(): Promise<unknown> {
+    // Get schema
+    this.outputToConsole('requesting source schema');
+    if (!this.destinationWebService) {
+      return;
+    }
+
+    try {
+      const query = `id=${process.env.PROVIDER}`;
+      return await this.destinationWebService.request(`${process.env.DESTINATION_ENDPOINT}?${query}`);
+    } catch (error) {
+      this.outputToConsole(error, 'error');
+    }
   }
 
   /**
@@ -172,8 +198,8 @@ class App {
    * @returns The destination data with hash.
    */
   private addHashes(value: MappedItem): MappedItem {
-    value["metadata_key_hash"] = md5(value.metadata as string);
-    value["metadata_hash"] = md5(value.metadata_key as string);
+    value["metadata_key_hash"] = md5(value.metadata_key as string);
+    value["metadata_hash"] = md5(value.metadata as string);
     return value;
   }
 
@@ -181,14 +207,43 @@ class App {
    * Outputs and/or sends the destination data.
    * @param data The formatted data.
    */
-  private async sendDestinationData(data: object) {
+  private async sendDestinationData(data: MappedItem, currentRecords: MappedItem[]|undefined) {
     this.outputToConsole(JSON.stringify(data, null, 2));
     if (!this.destinationWebService || !process.env.DESTINATION_ENDPOINT) {
       return;
     }
     this.outputToConsole('sending output');
+
+    const currentRecord = currentRecords?.find((record: MappedItem) =>
+    (record as MappedItem).unique_identifier === data.unique_identifier) as MappedItem;
+    if (currentRecord) {
+      const metadata = data.metadata;
+      delete data.metadata;
+      data.metadata = {};
+      (data.metadata as MappedItem).Metadata_Ledger = metadata;
+      try {
+        await this.destinationWebService.patch(`${process.env.DESTINATION_ENDPOINT}${data.unique_identifier}/`, data);
+      } catch (error) {
+        this.outputToConsole(error, 'error');
+      }
+      return;
+    }
+
     try {
       this.destinationWebService.post(process.env.DESTINATION_ENDPOINT, data);
+    } catch (error) {
+      this.outputToConsole(error, 'error');
+    }
+  }
+  /**
+   * Submit the the destination data transactions.
+   */
+  private async submitDestinationData() {
+    if (!this.destinationWebService || !process.env.DESTINATION_ENDPOINT_FINALIZE) {
+      return;
+    }
+    try {
+      this.destinationWebService.request(process.env.DESTINATION_ENDPOINT_FINALIZE);
     } catch (error) {
       this.outputToConsole(error, 'error');
     }
