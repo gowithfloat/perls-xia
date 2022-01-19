@@ -242,7 +242,7 @@ class App {
       (data.metadata as MappedItem).Metadata_Ledger = metadata;
       try {
         this.outputToConsole('record exists... patching');
-        await this.destinationWebService.patch(`${process.env.DESTINATION_ENDPOINT}${data.unique_identifier}/`, data);
+        await this.destinationWebService.patch(`${process.env.DESTINATION_ENDPOINT}${data.unique_record_identifier}/`, data);
       } catch (error) {
         this.outputToConsole(error, 'error');
       }
