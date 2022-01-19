@@ -212,7 +212,7 @@ class App {
    */
   private addHashes(value: MappedItem): MappedItem {
     value["metadata_key_hash"] = md5(value.metadata_key as string);
-    value["metadata_hash"] = md5(value.metadata as string);
+    value["metadata_hash"] = md5(JSON.stringify(value.metadata));
     return value;
   }
 
