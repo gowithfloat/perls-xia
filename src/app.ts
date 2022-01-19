@@ -138,7 +138,7 @@ class App {
       // This would be better suited if we already knew the data
       // to which to update or insert which out querying the XIS.
       // This is a fail safe though for those IDs that failed to be inserted.
-      const query = `id=${process.env.PROVIDER}`;
+      const query = `provider=${process.env.PROVIDER}`;
       return await this.destinationWebService.request(`${process.env.DESTINATION_ENDPOINT}?${query}`);
     } catch (error) {
       this.outputToConsole(error, 'error');
