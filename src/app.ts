@@ -138,7 +138,7 @@ class App {
       // This would be better suited if we already knew the data
       // to which to update or insert which out querying the XIS.
       // This is a fail safe though for those IDs that failed to be inserted.
-      const query = `id=${process.env.PROVIDER}`;
+      const query = `provider=${process.env.PROVIDER}`;
       return await this.destinationWebService.request(`${process.env.DESTINATION_ENDPOINT}?${query}`);
     } catch (error) {
       this.outputToConsole(error, 'error');
@@ -212,7 +212,7 @@ class App {
    */
   private addHashes(value: MappedItem): MappedItem {
     value["metadata_key_hash"] = md5(value.metadata_key as string);
-    value["metadata_hash"] = md5(value.metadata as string);
+    value["metadata_hash"] = md5(JSON.stringify(value.metadata));
     return value;
   }
 
@@ -242,7 +242,7 @@ class App {
       (data.metadata as MappedItem).Metadata_Ledger = metadata;
       try {
         this.outputToConsole('record exists... patching');
-        await this.destinationWebService.patch(`${process.env.DESTINATION_ENDPOINT}${data.unique_identifier}/`, data);
+        await this.destinationWebService.patch(`${process.env.DESTINATION_ENDPOINT}${data.unique_record_identifier}/`, data);
       } catch (error) {
         this.outputToConsole(error, 'error');
       }
