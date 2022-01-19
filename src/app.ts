@@ -42,6 +42,10 @@ class App {
     let url: string|undefined = process.env.SOURCE_ENDPOINT;
     const sourceSchema = await this.getSourceSchema();
     const transformationMapping = this.getTransformationMapping();
+
+    // Get current courses in provider
+    const currentRecords = await this.getCurrentDestinationRecords();
+
     // Loop through JSON:API pages. This will download the a single page,
     // then transforms the data by adding all of the included data,
     // then maps each source object within the page to a learning experience.
@@ -72,11 +76,12 @@ class App {
           this.outputToConsole(destinationValidated.errors, 'error');
           exit(2);
         }
-        await this.sendDestinationData(destinationData);
+        await this.sendDestinationData(value, currentRecords as MappedItem[]|undefined);
       }
       url = jsonApiData.nextPage;
       url = url?.replace(this.sourceWebService.host, '');
     }
+    await this.submitDestinationData();
   }
 
   /**
@@ -87,6 +92,15 @@ class App {
   private async getSourceJSONData(url: string): Promise<unknown> {
     // Request
     this.outputToConsole('requesting data');
+    // FIXME: This should really not be JSON:API/Drupal specific.
+    if (process.env.SOURCE_ENDPOINT_ADDITIONAL_FILTER_DAYS) {
+      let now = parseInt((new Date().getTime() / 1000).toFixed(0));
+      // Milliseconds, Seconds, Hours, Day
+      now += 60 * 60 * 24 * parseInt(process.env.SOURCE_ENDPOINT_ADDITIONAL_FILTER_DAYS);
+      const filter = `filter[status][value]=1&filter[date-group][group][conjunction]=OR&filter[created][condition][path]=created&filter[created][condition][operator]=%3E&filter[created][condition][value]=${now}&filter[created][condition][memberOf]=date-group&filter[changed][condition][path]=changed&filter[changed][condition][operator]=%3E&filter[changed][condition][value]=${now}&filter[changed][condition][memberOf]=date-group`;
+      url += `&${filter}`;
+    }
+
     try {
       return await this.sourceWebService.authenicatedRequest(url);
     } catch (error) {
@@ -104,6 +118,31 @@ class App {
     // Get schema
     this.outputToConsole('requesting source schema');
     return sourceSchema;
+  }
+
+  /**
+   * Gets the source schema;
+   * intentionally an async method if the
+   * schema lives outside this agent.
+   * @returns The source schema.
+   */
+   private async getCurrentDestinationRecords(): Promise<unknown> {
+    // Get schema
+    this.outputToConsole('requesting source schema');
+    if (!this.destinationWebService) {
+      return;
+    }
+
+    try {
+      // FIXME: Has the potential to get a lot of data.
+      // This would be better suited if we already knew the data
+      // to which to update or insert which out querying the XIS.
+      // This is a fail safe though for those IDs that failed to be inserted.
+      const query = `id=${process.env.PROVIDER}`;
+      return await this.destinationWebService.request(`${process.env.DESTINATION_ENDPOINT}?${query}`);
+    } catch (error) {
+      this.outputToConsole(error, 'error');
+    }
   }
 
   /**
@@ -172,8 +211,8 @@ class App {
    * @returns The destination data with hash.
    */
   private addHashes(value: MappedItem): MappedItem {
-    value["metadata_key_hash"] = md5(value.metadata as string);
-    value["metadata_hash"] = md5(value.metadata_key as string);
+    value["metadata_key_hash"] = md5(value.metadata_key as string);
+    value["metadata_hash"] = md5(value.metadata as string);
     return value;
   }
 
@@ -181,14 +220,52 @@ class App {
    * Outputs and/or sends the destination data.
    * @param data The formatted data.
    */
-  private async sendDestinationData(data: object) {
-    this.outputToConsole(JSON.stringify(data, null, 2));
+  private async sendDestinationData(data: MappedItem, currentRecords: MappedItem[]|undefined) {
     if (!this.destinationWebService || !process.env.DESTINATION_ENDPOINT) {
       return;
     }
+    const currentRecord = currentRecords?.find((record: MappedItem) =>
+    (record as MappedItem).unique_identifier === data.unique_identifier) as MappedItem;
+    if (currentRecord && data.metadata_hash === currentRecord.metadata_hash) {
+      // Nothing to update.
+      return;
+    }
     this.outputToConsole('sending output');
+    this.outputToConsole(JSON.stringify(data, null, 2));
+    if (currentRecord) {
+      // Specific Implementation for XIS.
+      // Once the metadata is inserted into the XIS,
+      // it is inserted into a metadata ledger.
+      const metadata = data.metadata;
+      delete data.metadata;
+      data.metadata = {};
+      (data.metadata as MappedItem).Metadata_Ledger = metadata;
+      try {
+        this.outputToConsole('record exists... patching');
+        await this.destinationWebService.patch(`${process.env.DESTINATION_ENDPOINT}${data.unique_identifier}/`, data);
+      } catch (error) {
+        this.outputToConsole(error, 'error');
+      }
+      return;
+    }
+
     try {
-      this.destinationWebService.post(process.env.DESTINATION_ENDPOINT, data);
+      this.outputToConsole('new record posting');
+      await this.destinationWebService.post(process.env.DESTINATION_ENDPOINT, data);
+    } catch (error) {
+      this.outputToConsole(error, 'error');
+    }
+  }
+  /**
+   * Submit the the destination data transactions.
+   */
+  private async submitDestinationData() {
+    this.outputToConsole('submitting destintaion data');
+    if (!this.destinationWebService || !process.env.DESTINATION_ENDPOINT_FINALIZE) {
+      return;
+    }
+    try {
+      await this.destinationWebService.request(process.env.DESTINATION_ENDPOINT_FINALIZE);
     } catch (error) {
       this.outputToConsole(error, 'error');
     }

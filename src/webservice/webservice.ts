@@ -20,6 +20,17 @@ class Webservice {
   }
 
   /**
+   * A method to post data to a server.
+   * @param url The path of the URL to which to post information.
+   * @param data The data to post.
+   * @returns The response data.
+   */
+  async patch(url: string, data: object): Promise<unknown> {
+    const response = await axios.patch(`${this.host}${url}`, data);
+    return response.data;
+  }
+
+  /**
    * Basic request with no authentication.
    * @param url The path of the URL to which to get information.
    * @returns The response.
