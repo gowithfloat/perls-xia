@@ -36,7 +36,7 @@ class Webservice {
    * @returns The response.
    */
   async request(url: string): Promise<unknown> {
-    return await axios.get(`${this.host}${url}`);
+    return (await axios.get(`${this.host}${url}`)).data;
   }
 }
 
