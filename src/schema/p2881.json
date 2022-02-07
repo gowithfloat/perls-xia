@@ -78,7 +78,7 @@
             }
           }
         },
-        "CourseInstance": {
+        "Course_Instance": {
           "type": "object",
           "properties": {
             "CourseCode": {
@@ -134,7 +134,7 @@
             }
           }
         },
-        "TechnicalInformation": {
+        "Technical_Information": {
           "type": "object",
           "properties": {
             "Thumbnail": {
@@ -145,7 +145,7 @@
             }
           }
         },
-        "LifecycleInformation": {
+        "Lifecycle_Information": {
           "type": "object",
           "properties": {
             "Provider": {

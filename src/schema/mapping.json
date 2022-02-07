@@ -6,42 +6,16 @@
     "prefix": "PERLS "
   },
   "metadata.Course.CourseTitle": "attributes.title",
-  "metadata.Course_Instance.InLanguage": "attributes.langcode",
-  "metadata.Course.CourseFullDescription": "attributes.field_description.value",
-  "metadata.TechnicalInformation.Thumbnail": {
-    "type": "uri",
-    "uri": "relationships.field_media_image.data.relationships.field_media_image.data.attributes.uri.url"
-  },
-  "metadata.Classification.ClassificationTaxon": {
-    "type": "static",
-    "key": "relationships.field_tags.data",
-    "value": "tag"
-  },
-  "metadata.Course_Instance.Instructor": {
-    "type": "static",
-    "value": "Owner"
-  },
-  "metadata.Lifecycle_Information.Maintainer": {
-    "type": "static",
-    "value": "Maintainer"
-  },
-  "metadata.Course.EducationalContext": {
-    "type": "static",
-    "value": "online"
-  },
+  "metadata.Course.CourseShortDescription": "attributes.field_description.value",
   "metadata.Course.CourseAudience": {
     "type": "static",
     "value": "General Public"
   },
-  "metadata.Course.CoursePrerequisites": {
+  "metadata.Course.CourseSubjectMatter": {
     "type": "static",
-    "value": "None"
+    "value": "Tactical Field Care"
   },
-  "metadata.Course.CreditAssessmentType": {
-    "type": "static",
-    "value": "self-assessment"
-  },
-  "metadata.Course.ProviderName": {
+  "metadata.Course.CourseProviderName": {
     "type": "env",
     "key": "PROVIDER"
   },
@@ -57,6 +31,27 @@
   "metadata.Course_Instance.DeliveryMode": {
     "type": "static",
     "value": "online"
+  },
+  "metadata.Course_Instance.Instructor": {
+    "type": "static",
+    "value": "online"
+  },
+  "metadata.Course_Instance.InLanguage": "attributes.langcode",
+  "metadata.Technical_Information.Location": {
+    "type": "static",
+    "value": "online"
+  },
+  "metadata.Technical_Information.Thumbnail": {
+    "type": "uri",
+    "uri": "relationships.field_media_image.data.relationships.field_media_image.data.attributes.uri.url"
+  },
+  "metadata.Lifecycle_Information.Provider": {
+    "type": "env",
+    "key": "PROVIDER"
+  },
+  "metadata.Lifecycle_Information.Maintainer": {
+    "type": "static",
+    "value": "Maintainer"
   },
   "provider_name": {
     "type": "env",
