@@ -26,6 +26,16 @@
       "runtimeArgs": [
           "run", "debug_docker"
       ]
+    },
+    {
+      "name": "Test All",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+          "run", "test"
+      ]
     }
   ]
 }
